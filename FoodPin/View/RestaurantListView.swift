@@ -65,7 +65,7 @@ struct RestaurantListView: View {
         NavigationView {
             List {
                 ForEach(restaurants.indices, id: \.self) {  index in
-                    //                BasicTextImageRow(imageName: restaurants[index].image, name: restaurants[index].name, type: restaurants[index].type, location: restaurants[index].location, isFavorite: $restaurants[index].isFavorite)
+                
                     ZStack(alignment: .leading) {
                         NavigationLink(destination: RestaurantDetailView(restaurant: restaurants[index])) {
                             EmptyView()
@@ -74,22 +74,6 @@ struct RestaurantListView: View {
                         .opacity(0)
                         
                         BasicTextImageRow(restaurant: $restaurants[index])
-                        //                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        //                            Button {
-                        //
-                        //                            } label: {
-                        //                                Image(systemName: "heart")
-                        //                            }
-                        //                            .tint(.green)
-                        //
-                        //                            Button {
-                        //
-                        //                            } label: {
-                        //                                Image(systemName: "square.and.arrow.up")
-                        //                            }
-                        //                            .tint(.orange)
-                        //
-                        //                        }
                     }
                 }.onDelete(perform: { indexSet in
                     restaurants.remove(atOffsets: indexSet)
@@ -110,21 +94,13 @@ struct RestaurantListView: View {
 
 
 struct BasicTextImageRow: View {
-    //
-    //    var imageName: String
-    //    var name: String
-    //    var type: String
-    //    var location: String
-    //    @Binding var isFavorite: Bool
+    
     
     // MARK: -Binding
     
     // TODO: somethings
     
     // FIXME: error
-    
-    
-    
     
     @State private var showOptions = false
     @State private var showError = false
@@ -185,16 +161,6 @@ struct BasicTextImageRow: View {
             }
             
         }
-        //        .onTapGesture {
-        //            showOptions.toggle()
-        //        }
-        //        .actionSheet(isPresented: $showOptions) {
-        //            ActionSheet(title: Text("What do you want to do?"), message: nil, buttons: [.default(Text("Reservea a table"), action: {
-        //                self.showError.toggle()
-        //            }), .default(Text("Mark as favorite"), action: {
-        //                self.restaurant.isFavorite.toggle()
-        //            }), .cancel()])
-        //        }
         .alert(isPresented: $showError) {
             Alert(title: Text("Not yet available"),
                   message: Text("Sorry, this feature is not available yet. Please retry later."),
@@ -249,9 +215,6 @@ struct ContentView_Previews: PreviewProvider {
         
         RestaurantListView()
             .preferredColorScheme(.dark)
-        
-        //        BasicTextImageRow(re: "cafedeadend", name: "Cafe Deadend", type: "Cafe", location: "Hong Kong", isFavorite: .constant(true))
-        //            .previewLayout(.sizeThatFits)
         
         BasicTextImageRow(restaurant: .constant(Restaurant(name: "Cafe Deadend", type: "Cafe", location: "Hong Kong", phone: "test", description: "test", image: "cafedeadend", isFavorite: true)))
             .previewLayout(.sizeThatFits)
