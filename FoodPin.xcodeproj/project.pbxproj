@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B784C8D8288EB6D100AFBBEB /* PlaceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B784C8D7288EB6D100AFBBEB /* PlaceDetailView.swift */; };
 		B78677B228893CA0002A794F /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78677B128893CA0002A794F /* Restaurant.swift */; };
 		B78DB8042885A4430090AF92 /* FoodPinApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78DB8032885A4430090AF92 /* FoodPinApp.swift */; };
 		B78DB8062885A4430090AF92 /* RestaurantListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B78DB8052885A4430090AF92 /* RestaurantListView.swift */; };
@@ -16,9 +17,12 @@
 		B7BA6177288C541600A8C8B9 /* RestaurantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BA6176288C541600A8C8B9 /* RestaurantDetailView.swift */; };
 		B7D130EE288E557A000F4F4D /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7D130EC288E557A000F4F4D /* Nunito-Regular.ttf */; };
 		B7D130EF288E557A000F4F4D /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7D130ED288E557A000F4F4D /* Nunito-Bold.ttf */; };
+		B7D130F2288E855A000F4F4D /* Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D130F1288E855A000F4F4D /* Places.swift */; };
+		B7D130F4288EA394000F4F4D /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D130F3288EA394000F4F4D /* Place.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B784C8D7288EB6D100AFBBEB /* PlaceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailView.swift; sourceTree = "<group>"; };
 		B78677B128893CA0002A794F /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		B78DB8002885A4430090AF92 /* FoodPin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodPin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B78DB8032885A4430090AF92 /* FoodPinApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPinApp.swift; sourceTree = "<group>"; };
@@ -30,6 +34,8 @@
 		B7D130EC288E557A000F4F4D /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Regular.ttf"; sourceTree = "<group>"; };
 		B7D130ED288E557A000F4F4D /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		B7D130F0288E5601000F4F4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B7D130F1288E855A000F4F4D /* Places.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
+		B7D130F3288EA394000F4F4D /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +53,8 @@
 			isa = PBXGroup;
 			children = (
 				B78677B128893CA0002A794F /* Restaurant.swift */,
+				B7D130F1288E855A000F4F4D /* Places.swift */,
+				B7D130F3288EA394000F4F4D /* Place.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -57,6 +65,7 @@
 				B78DB8052885A4430090AF92 /* RestaurantListView.swift */,
 				B7BA6172288C28FB00A8C8B9 /* ActivityView.swift */,
 				B7BA6176288C541600A8C8B9 /* RestaurantDetailView.swift */,
+				B784C8D7288EB6D100AFBBEB /* PlaceDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -189,9 +198,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B78DB8062885A4430090AF92 /* RestaurantListView.swift in Sources */,
+				B7D130F2288E855A000F4F4D /* Places.swift in Sources */,
 				B7BA6177288C541600A8C8B9 /* RestaurantDetailView.swift in Sources */,
+				B784C8D8288EB6D100AFBBEB /* PlaceDetailView.swift in Sources */,
 				B7BA6173288C28FB00A8C8B9 /* ActivityView.swift in Sources */,
 				B78DB8042885A4430090AF92 /* FoodPinApp.swift in Sources */,
+				B7D130F4288EA394000F4F4D /* Place.swift in Sources */,
 				B78677B228893CA0002A794F /* Restaurant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

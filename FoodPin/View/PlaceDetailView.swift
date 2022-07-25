@@ -1,27 +1,28 @@
 //
-//  RestaurantDetailView.swift
+//  PlaceDetailView.swift
 //  FoodPin
 //
-//  Created by Zhao-Rong Lai on 2022/7/24.
+//  Created by Zhao-Rong Lai on 2022/7/25.
 //
 
 import SwiftUI
 
-struct RestaurantDetailView: View {
-    
-    
+struct PlaceDetailView: View {
     @Environment(\.dismiss) var dismiss
     
-    var restaurant: Restaurant
+    var place: Place
     
     var body: some View {
-        ScrollView {
+//        ScrollView {
             VStack(alignment: .leading) {
-                Image(restaurant.image)
-                    .resizable()
+                AsyncImage(url: URL(string: place.image)){ image in
+                image
+//                    .resizable()
                     .scaledToFill()
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: 445)
+//                    .frame(height: .infinity)
+                    .ignoresSafeArea()
+                    
                     .overlay {
                         VStack {
                             Image(systemName: "heart")
@@ -32,10 +33,11 @@ struct RestaurantDetailView: View {
                                 .padding(.top, 40)
                             
                             VStack(alignment: .leading, spacing: 5) {
-                                Text(restaurant.name)
-                                    .font(.custom("Nunito-Regular", size: 35, relativeTo: .largeTitle))
+                                Text(place.name)
+                                    .font(.system(.largeTitle, design: .rounded))
                                     .bold()
-                                Text(restaurant.type)
+                                    .background(Color.black)
+                                Text(place.address)
                                     .font(.system(.headline, design: .rounded))
                                     .padding(.all, 5)
                                     .background(Color.black)
@@ -45,7 +47,10 @@ struct RestaurantDetailView: View {
                             .padding()
                         }
                     }
-            }
+                } placeholder: {
+                    Color.orange.opacity(0.1)
+                }
+//            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -53,15 +58,16 @@ struct RestaurantDetailView: View {
                 Button(action: {
                     dismiss()
                 },label: {
-                    Text("\(Image(systemName: "chevron.left")) \(restaurant.name)")
+                    Text("\(Image(systemName: "chevron.left")) \(place.name)")
+                        .foregroundColor(.black)
                 })
             }
         }
     }
 }
 
-struct RestaurantDetailView_Previews: PreviewProvider {
+struct PlaceDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        RestaurantDetailView(restaurant: Restaurant(name: "Cafe Deadend", type: "Coffee & Tea Shop", location: "G/F, 72 Po Hing Fong, Sheung Wan, Hong Kong", phone: "232-923423", description: "Searching for great breakfast eateries and coffee? This place is for you. We open at 6:30 every morning, and close at 9 PM. We offer espresso and espresso based drink, such as capuccino, cafe latte, piccolo and many more. Come over and enjoy a great meal.", image: "cafedeadend", isFavorite: false))
+        PlaceDetailView(place: Place(id: 1, name: "TEST", address: "TEST", introduction: "TEST", tel: "Test", image: "https://www.travel.taipei/image/282358", isFavorite: false))
     }
 }

@@ -57,28 +57,43 @@ struct RestaurantListView: View {
                                Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "22 Charlwood Street London SW1V 2DY Pimlico", phone: "432-344050", description: "With kitchen serving gourmet burgers. We offer food every day of the week, Monday through to Sunday. Join us every Sunday from 4:30 – 7:30pm for live acoustic music!", image: "cask", isFavorite: false)
     ]
     
+    // !!!: Taipei
+    @State var places: Places?
+    @State var placeList: [Place] = []
     
-    // !!!: 123
+    
+    
     
     
     var body: some View {
+        
         NavigationView {
             List {
-                ForEach(restaurants.indices, id: \.self) {  index in
                 
-                    ZStack(alignment: .leading) {
-                        NavigationLink(destination: RestaurantDetailView(restaurant: restaurants[index])) {
-                            EmptyView()
-                            
-                        }
-                        .opacity(0)
-                        
-                        BasicTextImageRow(restaurant: $restaurants[index])
-                    }
-                }.onDelete(perform: { indexSet in
-                    restaurants.remove(atOffsets: indexSet)
-                })
-                .listRowSeparator(.hidden)
+//                ForEach(self.placeList.indices, id:\.self){ index in
+//
+//                        HStack {
+//                            BasicTourImageRow(place: $placeList[index])
+//                        }
+//                    }
+                    
+                                    ForEach(placeList.indices, id: \.self) {  index in
+                
+                                        ZStack(alignment: .leading) {
+                                            NavigationLink(destination: PlaceDetailView(place: placeList[index]))
+                                            {
+                                                EmptyView()
+
+                                            }
+                                            .opacity(0)
+                
+                                            BasicTourImageRow(place: $placeList[index])
+                                        }
+                                    }.onDelete(perform: { indexSet in
+                                        restaurants.remove(atOffsets: indexSet)
+                                    })
+                                    .listRowSeparator(.hidden)
+                                
             }
             .listStyle(.plain)
             
@@ -86,7 +101,58 @@ struct RestaurantListView: View {
             .navigationBarTitleDisplayMode(.automatic)
         }
         .accentColor(.white)
+        .onAppear(perform: self.loadData)
         // ???: OK
+    }
+    
+    
+    //MARK: fetchData through interenet
+    
+    func loadData(){
+        //        self.result = "Test"
+        
+        let urlString = "https://www.travel.taipei/open-api/zh-tw/Attractions/All?categoryIds=12&page=1"
+        
+        guard let url = URL(string: urlString) else {
+            print("Illegle URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        //        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            guard let data = data else{
+                return
+            }
+            
+            do {
+                let places = try JSONDecoder().decode(Places.self, from: data)
+                DispatchQueue.main.async {
+                    self.places = places
+//                                        print("Output: \(places)")
+                }
+            } catch let error {
+                fatalError(error.localizedDescription)
+            }
+            //            if let data = data{
+            //                DispatchQueue.main.async{
+            //
+            //                }
+            //            }
+        }.resume()
+        
+        if let data = places?.data {
+            for p in data{
+                self.placeList.append(Place(id: p.id, name: p.name, address: p.address, introduction: p.introduction, tel: p.tel, image: p.images[0].src, isFavorite: false))
+            }
+        }
     }
 }
 
@@ -180,6 +246,117 @@ struct BasicTextImageRow: View {
     }
 }
 
+struct BasicTourImageRow: View {
+    
+    
+    // MARK: -Binding
+    
+    // TODO: somethings
+    
+    // FIXME: error
+    
+    @State private var showOptions = false
+    @State private var showError = false
+    
+    //MARK: -Binding
+    
+    @Binding var place: Place
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 20) {
+            let imageURL = String(format: "%@", place.image)
+            AsyncImage(url: URL(string: imageURL)) {
+                phase in
+                switch phase {
+                case .empty:
+                    Color.purple.opacity(0.1)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .frame(width: 120, height: 118)
+                        .cornerRadius(20)
+                    
+                case .failure(_):
+                    Image(systemName:"exclamationmark.icloud")
+                        .background(.purple)
+                @unknown default:
+                    Image(systemName:"exclamationmark.icloud")
+                    
+                }
+            }
+            
+            //
+            //            Image(restaurant.images.src + restaurant.images.ext)
+            //                .resizable()
+            //                .frame(width: 120, height: 118)
+            //                .cornerRadius(20)
+            
+            VStack(alignment:.leading) {
+                Text(place.name)
+                    .font(.system(.title2, design: .rounded))
+                Text(place.address)
+                    .modifier(textModifiers(.body))
+                Text(place.tel)
+                    .modifier(textModifiers(.subheadline))
+                    .foregroundColor(.gray)
+            }
+                        if place.isFavorite{
+                            Spacer()
+            
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.yellow)
+                        }
+        }
+        .contextMenu{
+            Button(action: {
+                self.showError.toggle()
+            }) {
+                HStack {
+                    Text("Reserve a table")
+                    Image(systemName: "phone")
+                }
+            }
+            
+            Button(action: {
+                self.place.isFavorite.toggle()
+                //                self.restaurant.isFavorite.toggle()
+            }) {
+                                HStack {
+                                    Text(place.isFavorite ? "Remove from favorites" : "Mark as favorite")
+                                    Image(systemName: "heart")
+                                }
+            }
+            Button(action: {
+                self.showOptions.toggle()
+            }) {
+                HStack {
+                    Text("Share")
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+            
+        }
+        .alert(isPresented: $showError) {
+            Alert(title: Text("Not yet available"),
+                  message: Text("Sorry, this feature is not available yet. Please retry later."),
+                  primaryButton: .default(Text("OK")),
+                  secondaryButton: .cancel())
+        }
+        .sheet(isPresented: $showOptions) {
+            let defaultText = "Just checking in at \(place.name)"
+            
+            if let imageToShare = UIImage(named: place.image) {
+                ActivityView(activityItems: [defaultText, imageToShare])
+            } else {
+                ActivityView(activityItems: [defaultText])
+            }
+        }
+        
+    }
+}
+
+
+
 struct FullImageRow: View {
     
     var imageName: String
@@ -212,9 +389,11 @@ struct FullImageRow: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         RestaurantListView()
+            .previewInterfaceOrientation(.portrait)
         
         RestaurantListView()
             .preferredColorScheme(.dark)
+        
         
         BasicTextImageRow(restaurant: .constant(Restaurant(name: "Cafe Deadend", type: "Cafe", location: "Hong Kong", phone: "test", description: "test", image: "cafedeadend", isFavorite: true)))
             .previewLayout(.sizeThatFits)
