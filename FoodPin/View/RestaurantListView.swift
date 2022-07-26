@@ -70,30 +70,30 @@ struct RestaurantListView: View {
         NavigationView {
             List {
                 
-//                ForEach(self.placeList.indices, id:\.self){ index in
-//
-//                        HStack {
-//                            BasicTourImageRow(place: $placeList[index])
-//                        }
-//                    }
+                //                ForEach(self.placeList.indices, id:\.self){ index in
+                //
+                //                        HStack {
+                //                            BasicTourImageRow(place: $placeList[index])
+                //                        }
+                //                    }
+                
+                ForEach(placeList.indices, id: \.self) {  index in
                     
-                                    ForEach(placeList.indices, id: \.self) {  index in
+                    ZStack(alignment: .leading) {
+                        NavigationLink(destination: PlaceDetailView(place: placeList[index]))
+                        {
+                            EmptyView()
+                            
+                        }
+                        .opacity(0)
+                        
+                        BasicTourImageRow(place: $placeList[index])
+                    }
+                }.onDelete(perform: { indexSet in
+                    restaurants.remove(atOffsets: indexSet)
+                })
+                .listRowSeparator(.hidden)
                 
-                                        ZStack(alignment: .leading) {
-                                            NavigationLink(destination: PlaceDetailView(place: placeList[index]))
-                                            {
-                                                EmptyView()
-
-                                            }
-                                            .opacity(0)
-                
-                                            BasicTourImageRow(place: $placeList[index])
-                                        }
-                                    }.onDelete(perform: { indexSet in
-                                        restaurants.remove(atOffsets: indexSet)
-                                    })
-                                    .listRowSeparator(.hidden)
-                                
             }
             .listStyle(.plain)
             
@@ -136,7 +136,11 @@ struct RestaurantListView: View {
                 let places = try JSONDecoder().decode(Places.self, from: data)
                 DispatchQueue.main.async {
                     self.places = places
-//                                        print("Output: \(places)")
+                    
+                    for p in self.places!.data{
+                        self.placeList.append(Place(id: p.id, name: p.name, address: p.address, introduction: p.introduction, tel: p.tel, image: p.images[0].src, isFavorite: false))
+                    }
+                    
                 }
             } catch let error {
                 fatalError(error.localizedDescription)
@@ -148,11 +152,7 @@ struct RestaurantListView: View {
             //            }
         }.resume()
         
-        if let data = places?.data {
-            for p in data{
-                self.placeList.append(Place(id: p.id, name: p.name, address: p.address, introduction: p.introduction, tel: p.tel, image: p.images[0].src, isFavorite: false))
-            }
-        }
+        
     }
 }
 
@@ -300,12 +300,12 @@ struct BasicTourImageRow: View {
                     .modifier(textModifiers(.subheadline))
                     .foregroundColor(.gray)
             }
-                        if place.isFavorite{
-                            Spacer()
-            
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.yellow)
-                        }
+            if place.isFavorite{
+                Spacer()
+                
+                Image(systemName: "heart.fill")
+                    .foregroundColor(.yellow)
+            }
         }
         .contextMenu{
             Button(action: {
@@ -321,10 +321,10 @@ struct BasicTourImageRow: View {
                 self.place.isFavorite.toggle()
                 //                self.restaurant.isFavorite.toggle()
             }) {
-                                HStack {
-                                    Text(place.isFavorite ? "Remove from favorites" : "Mark as favorite")
-                                    Image(systemName: "heart")
-                                }
+                HStack {
+                    Text(place.isFavorite ? "Remove from favorites" : "Mark as favorite")
+                    Image(systemName: "heart")
+                }
             }
             Button(action: {
                 self.showOptions.toggle()
